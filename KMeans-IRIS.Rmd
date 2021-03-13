@@ -4,6 +4,15 @@ author: "Miss.AkshiBhasker"
 date: "3/13/2021"
 output: html_document
 ---
+install.packages("devtools")  # so we can install from github
+library("devtools")
+install_github("ropensci/plotly")  # plotly is part of ropensci
+library(plotly)
+ 
+py <- plotly(username="r_user_guide", key="mw5isa4yqp")  # open plotly connection
+ggiris <- qplot(Petal.Width, Sepal.Length, data = iris, color = Species)
+ 
+py$ggplotly(ggiris)  # send to plotly
 
 library(class)
 library(caret)
