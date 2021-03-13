@@ -1,0 +1,37 @@
+---
+title: "Iris-Kmeans"
+author: "Miss.AkshiBhasker"
+date: "3/13/2021"
+output: html_document
+---
+
+library(class)
+library(caret)
+library(readr)
+library(tidyr)
+library(dplyr)
+
+####Set the seed
+set.seed(810)
+
+####The KMI ALGO
+kmi<-kmeans(iris[,3:4], centers=3, nstart=15)
+
+###Sum of withinss(distance within the clusters)
+kmi$withinss
+
+##Sum of total withinss (total distance between the clusters)
+kmi$tot.withinss
+
+###Tabuating how many species there are in each cluster
+table(kmi$cluster, iris$species)
+
+##How many clusters can we plot
+totwss<-NULL
+for(i in 2:15){
+totwss<-append(totwss, kmeans(iris[,3:4], centers=i)$tot.withinss)}
+plot(x=2:15, y=totwss, type='b', xlab='Clusters',ylab='Total Withinss')
+
+##Actual plot of the IRIS on K-Means and Petal Width and Length
+ggplot(iris, aes(x=Petal.Length, y=Petal.Width, color=Species))+geom_point(size=4)+scale_color_manual(values=c('green','blue','pink'))+geom_point(shape=1,size=4,color='pink')
+
