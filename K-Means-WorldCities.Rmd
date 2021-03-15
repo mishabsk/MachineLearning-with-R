@@ -1,0 +1,83 @@
+---
+title: "KMI Means on World_Cities"
+author: "Miss.AkshiBhasker"
+date: "3/14/2021"
+output: html_document
+---
+
+``
+library(mdsr)
+head(world_cities)
+str(world_cities)
+summary(world_cities)
+
+##Order the cities by decreasing population. 
+ind<-order(world_cities$population, decreasing = TRUE)
+
+##Find the biggest cities in the table, based on the parameters of population, latitude, longitude. Label this variable - ‘big cities’.
+big_citites<-world_cities[ind, c(‘population’,’latitude’, ‘longitude’)]
+
+##Keep the first 4000 cities and drop the population column
+big_cities<-big_cities[1:4000,-1]
+
+##Attach the ‘big cities’ variable to the workspace
+attach(big_cities)
+
+##Plot the longitude and latitude on a graph.
+plot(longitude, latitude, pch=15)
+
+#See the groupings of the cluster.
+head(kmi.cities$cluster)
+
+#Devise the K-Means Algorithm
+kmi.cities<-kmeans(big_cities, centers=6, nstart=1)  
+
+#See the number of samples inside the cluster
+head(kmi.cities$cluster)
+
+##Calculate the total withinss for the created k-means clusters.
+kmi.cities$tot.withinss
+
+##The n-start selects the no. of random sets for the iteration. Vary the n-start command for the k-means algorithm, and calculate the total withinss sum for n-start=1 and n-start=20.
+kmi.cities.n1<-kmeans(big_cities, centers=6 , nstart=1)
+kmi.cities.n1$tot.withinss
+
+kmi.cities.n2<-kmeans(big_cities, centers=6, nstart=20)
+kmi.cities.n2$tot.withinss
+
+##Calculate the total withinss sum for the k-means algorithm for values ranging from center=1 to center=7, and plot this as a graph.
+kmi.cities.c1<-kmeans(big_cities, centers=1, nstart=15)
+kmi.cities.c2<-kmeans(big_cities, centers=2, nstart=15)
+kmi.cities.c3<-kmeans(big_cities, centers=3, nstart=15)
+kmi.cities.c4<-kmeans(big_cities, centers=4, nstart=15)
+kmi.cities.c5<-kmeans(big_cities, centers=5, nstart=15)
+kmi.cities.c6<-kmeans(big_cities, centers=6, nstart=15)
+kmi.cities.c7<-kmeans(big_cities, centers=7, nstart=15)
+
+v1<-kmi.cities.c1$tot.withinss
+v2<-kmi.cities.c2$tot.withinss
+v3<-kmi.cities.c3$tot.withinss
+v4<-kmi.cities.c4$tot.withinss
+v5<-kmi.cities.c5$tot.withinss
+v6<-kmi.cities.c6$tot.withinss
+
+v <- c(v1, v2, v3, v4, v5, v6)
+plot(v, xlab = "Number of clusters, K", ylab = "Within-clusters variability") 
+
+##Try automating the above function, if you want to consider more values of K.
+
+v <- rep(0, 20) for(K in 1:20){ km.cities <- kmeans(bigcities, centers = K, nstart = 20) v[K] <- km.cities$tot.withinss } 
+plot(v, xlab = "Number of clusters, K", ylab = "Within-clusters variability")
+
+#The hclust() function implements hierarchical clustering in R
+hc.complete <- hclust(dist(big_cities), method = "complete")
+
+#You can plot the above function to see what it potential looks like:
+plot(hc.complete, main = "Complete Linkage", xlab="", sub="", cex=.9)
+
+
+
+
+
+
+
